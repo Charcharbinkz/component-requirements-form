@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GC Design System • Component Requirements Form</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; background-color: #f9f9f9; }
+    h1, h2, h3 { color: #333; }
+    form { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    label { display: block; margin-top: 12px; font-weight: bold; }
+    input[type="text"], textarea { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    button { margin-top: 20px; padding: 10px 20px; background-color: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background-color: #005fa3; }
+  </style>
+</head>
+<body>
+  <h1>GC Design System • Component Requirements</h1>
+  <form id="requirements-form">
+    <h2>Component Information</h2>
+    <label>Component Name</label>
+    <input type="text" name="componentName">
+    <label>Description</label>
+    <textarea name="description"></textarea>
+    <label>Component Owners</label>
+    <input type="text" name="owners">
+    <label>Status</label>
+    <input type="text" name="status" value="In progress">
+
+    <h2>Technical Specifications</h2>
+    <h3>Element Names</h3>
+    <table>
+      <tr><th>Framework</th><th>Element Name</th></tr>
+      <tr><td>None (web component)</td><td><input type="text" name="webElement"></td></tr>
+      <tr><td>React</td><td><input type="text" name="reactElement"></td></tr>
+      <tr><td>Angular</td><td><input type="text" name="angularElement"></td></tr>
+      <tr><td>Vue</td><td><input type="text" name="vueElement"></td></tr>
+    </table>
+
+    <h3>Properties</h3>
+    <textarea name="properties" placeholder="List properties and details"></textarea>
+
+    <h3>Slots</h3>
+    <textarea name="slots" placeholder="List slots and details"></textarea>
+
+    <h2>Functional Requirements</h2>
+    <h3>Behaviour</h3>
+    <textarea name="behaviour" placeholder="Describe component behaviour"></textarea>
+    <h3>User Interface</h3>
+    <textarea name="ui" placeholder="Describe UI requirements"></textarea>
+    <h3>Figma Specific</h3>
+    <textarea name="figma" placeholder="Describe Figma requirements"></textarea>
+
+    <h2>Localization</h2>
+    <table>
+      <tr><th>English (en-CA)</th><th>French (fr-CA)</th></tr>
+      <tr>
+        <td><input type="text" name="englishText"></td>
+        <td><input type="text" name="frenchText"></td>
+      </tr>
+    </table>
+
+    <h2>Use Cases</h2>
+    <textarea name="useCases"></textarea>
+
+    <h2>Decisions</h2>
+    <h3>Technical Decisions</h3>
+    <textarea name="technicalDecisions"></textarea>
+    <h3>Design Decisions</h3>
+    <textarea name="designDecisions"></textarea>
+
+    <h2>Appendix</h2>
+    <label>Thumbnail Image URL</label>
+    <input type="text" name="thumbnail">
+    <label>Anatomy</label>
+    <textarea name="anatomy"></textarea>
+    <label>Policy Review</label>
+    <textarea name="policyReview"></textarea>
+    <label>Definitions</label>
+    <textarea name="definitions"></textarea>
+    <label>Reference Links</label>
+    <textarea name="references"></textarea>
+
+    <button type="submit">Submit Component Requirements</button>
+  </form>
+
+  <script>
+    document.getElementById("requirements-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = Object.fromEntries(new FormData(e.target).entries());
+
+      try {
+        const res = await fetch("https://YOUR-BACKEND-URL.onrender.com/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
+
+        if (res.ok) {
+          alert("Form submitted successfully!");
+          e.target.reset();
+        } else {
+          alert("Error submitting form.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Network error submitting form.");
+      }
+    });
+  </script>
+</body>
+</html>

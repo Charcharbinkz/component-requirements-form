@@ -45,6 +45,157 @@
 </head>
 <body>
 
-  <h1>Form Submissions</h1>
+  <h1>Component Documentation Submissions</h1>
 
   <table id="submissions-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Data</th>
+        <th>Generate</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function loadSubmissions() {
+      const res = await fetch("https://component-requirements-form.onrender.com/submissions");
+      const submissions = await res.json();
+
+      const tbody = document.querySelector("#submissions-table tbody");
+      tbody.innerHTML = "";
+
+      submissions.forEach(sub => {
+        const row = document.createElement("tr");
+
+        const idCell = document.createElement("td");
+        idCell.textContent = sub.id;
+
+        const dataCell = document.createElement("td");
+        const parsed = JSON.parse(sub.data);
+
+        // Pretty-print ALL fields dynamically
+        dataCell.innerHTML = "<pre>" + JSON.stringify(parsed, null, 2) + "</pre>";
+
+        const docCell = document.createElement("td");
+        const btn = document.createElement("button");
+        btn.textContent = "Generate Documentation";
+        btn.onclick = () => downloadDoc(parsed);
+        docCell.appendChild(btn);
+
+        row.appendChild(idCell);
+        row.appendChild(dataCell);
+        row.appendChild(docCell);
+        tbody.appendChild(row);
+      });
+    }
+
+    // Updated Markdown generator for the NEW GC-style schema
+    function generateMarkdown(data) {
+      return `
+# ${data.name}
+
+## Short Description
+${data.shortDescription || ""}
+
+## Status
+${data.status || ""}
+
+## Version
+${data.version || ""}
+
+## Tags
+${data.tags || ""}
+
+---
+
+# Overview
+${data.overview || ""}
+
+# When to Use
+${data.whenToUse || ""}
+
+# When Not to Use
+${data.whenNotToUse || ""}
+
+# How It Works
+${data.howItWorks || ""}
+
+## States
+${data.states || ""}
+
+## Interactions
+${data.interactions || ""}
+
+# Anatomy
+${data.anatomy || ""}
+
+# Content Guidelines
+${data.contentGuidelines || ""}
+
+# Accessibility
+
+## Keyboard Interaction
+${data.accessibilityKeyboard || ""}
+
+## Screen Reader Notes
+${data.accessibilityScreenReader || ""}
+
+## WCAG Considerations
+${data.accessibilityWCAG || ""}
+
+# Code Examples
+
+## HTML
+\`\`\`html
+${data.htmlExample || ""}
+\`\`\`
+
+## React
+\`\`\`jsx
+${data.reactExample || ""}
+\`\`\`
+
+## Variants
+\`\`\`html
+${data.variantExamples || ""}
+\`\`\`
+
+# Design Tokens
+
+## Color
+${data.tokensColor || ""}
+
+## Spacing
+${data.tokensSpacing || ""}
+
+## Typography
+${data.tokensTypography || ""}
+
+# API / Props
+${data.props || ""}
+
+# Related Components
+${data.relatedComponents || ""}
+`;
+    }
+
+    function downloadDoc(data) {
+      const md = generateMarkdown(data);
+      const blob = new Blob([md], { type: "text/markdown" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${data.name.replace(/\s+/g, "-").toLowerCase()}.md`;
+      a.click();
+
+      URL.revokeObjectURL(url);
+    }
+
+    loadSubmissions();
+  </script>
+
+</body>
+</html>

@@ -30,40 +30,21 @@
       word-wrap: break-word;
       margin: 0;
     }
+    button {
+      padding: 6px 12px;
+      background: #005ea5;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #003f73;
+    }
   </style>
 </head>
 <body>
 
   <h1>Form Submissions</h1>
+
   <table id="submissions-table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Data</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-
-  <script>
-    async function loadSubmissions() {
-      const res = await fetch("https://component-requirements-form.onrender.com/submissions");
-      const submissions = await res.json();
-
-      const tbody = document.querySelector("#submissions-table tbody");
-      tbody.innerHTML = "";
-
-      submissions.forEach(sub => {
-        const row = document.createElement("tr");
-
-        const idCell = document.createElement("td");
-        idCell.textContent = sub.id;
-
-        const dataCell = document.createElement("td");
-        const parsed = JSON.parse(sub.data);
-        dataCell.innerHTML = "<pre>" + JSON.stringify(parsed, null, 2) + "</pre>";
-
-        row.appendChild(idCell);
-        row.appendChild(dataCell);
-        tbody.appendChild(row);
-      });

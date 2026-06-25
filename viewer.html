@@ -91,72 +91,102 @@
       });
     }
 
-    // NEW GC-STYLE MARKDOWN GENERATOR
+    // Helper: single bullet
+    function bullet(text) {
+      return text ? `- ${text}\n` : "";
+    }
+
+    // Helper: multi-line bullets
+    function bullets(text) {
+      if (!text) return "";
+      return text
+        .split("\n")
+        .filter(line => line.trim() !== "")
+        .map(line => `- ${line}`)
+        .join("\n");
+    }
+
+    // ⭐ NEW GC-STYLE FIRST-DRAFT MARKDOWN GENERATOR
     function generateMarkdown(d) {
       return `
 # ${d.componentName || ""}
 
 Also called: ${d.alsoCalled || ""}
 
-## Definition
+---
+
+# Definition
 ${d.definition || ""}
 
-![Preview image](${d.previewImageURL || ""})
-*Alt text:* ${d.previewImageAltText || ""}
+${
+  d.previewImageURL
+    ? `![Preview image](${d.previewImageURL})\n*Alt text:* ${d.previewImageAltText || ""}`
+    : ""
+}
 
 ---
 
 # Use Cases
+
 ${d.useCaseIntro || ""}
 
-- ${d.useCase1 || ""}
-- ${d.useCase2 || ""}
-- ${d.useCase3 || ""}
-- ${d.useCase4 || ""}
+${bullet(d.useCase1)}
+${bullet(d.useCase2)}
+${bullet(d.useCase3)}
+${bullet(d.useCase4)}
 
 ---
 
 # Problems This Component Solves
+
 ${d.problemsIntro || ""}
 
-- ${d.problem1 || ""}
-- ${d.problem2 || ""}
-- ${d.problem3 || ""}
-- ${d.problem4 || ""}
+${bullet(d.problem1)}
+${bullet(d.problem2)}
+${bullet(d.problem3)}
+${bullet(d.problem4)}
 
 ---
 
 # Related Components
-- ${d.related1 || ""}
-- ${d.related2 || ""}
-- ${d.related3 || ""}
+
+${bullet(d.related1)}
+${bullet(d.related2)}
+${bullet(d.related3)}
 
 ---
 
 # Component Types & Roles
 
 ## ${d.type1Name || ""}
-![Type image](${d.type1ImageURL || ""})
-*Alt text:* ${d.type1ImageAlt || ""}
+
+${
+  d.type1ImageURL
+    ? `![Type image](${d.type1ImageURL})\n*Alt text:* ${d.type1ImageAlt || ""}`
+    : ""
+}
 
 Use this type to:
-- ${d.type1Use1 || ""}
-- ${d.type1Use2 || ""}
-- ${d.type1Use3 || ""}
-- ${d.type1Use4 || ""}
+${bullet(d.type1Use1)}
+${bullet(d.type1Use2)}
+${bullet(d.type1Use3)}
+${bullet(d.type1Use4)}
 
 ---
 
 # Anatomy
 
-![Anatomy](${d.anatomyImageURL || ""})
-*Alt text:* ${d.anatomyAltText || ""}
+${
+  d.anatomyImageURL
+    ? `![Anatomy](${d.anatomyImageURL})\n*Alt text:* ${d.anatomyAltText || ""}`
+    : ""
+}
 
 ### Elements
-- ${d.anatomyElement1 || ""}
-- ${d.anatomyElement2 || ""}
-- ${d.anatomyElement3 || ""}
-- ${d.anatomyElement4 || ""}
+${bullet(d.anatomyElement1)}
+${bullet(d.anatomyElement2)}
+${bullet(d.anatomyElement3)}
+${bullet(d.anatomyElement4)}
 
 ---
 
@@ -165,76 +195,77 @@ Use this type to:
 ${d.designAccessibilityIntro || ""}
 
 ### Requirements
-- ${d.requirement1 || ""}
-- ${d.requirement2 || ""}
-- ${d.requirement3 || ""}
-- ${d.requirement4 || ""}
+${bullet(d.requirement1)}
+${bullet(d.requirement2)}
+${bullet(d.requirement3)}
+${bullet(d.requirement4)}
 
 ### Details Sections
+
 #### ${d.details1Title || ""}
-${formatBullets(d.details1Bullets)}
+${bullets(d.details1Bullets)}
 
 #### ${d.details2Title || ""}
-${formatBullets(d.details2Bullets)}
+${bullets(d.details2Bullets)}
 
 #### ${d.details3Title || ""}
-${formatBullets(d.details3Bullets)}
+${bullets(d.details3Bullets)}
 
 ---
 
 # Canada.ca Requirements
 
 ### Required Elements
-${formatBullets(d.requiredElements)}
+${bullets(d.requiredElements)}
 
 ### Optional Elements
-${formatBullets(d.optionalElements)}
+${bullets(d.optionalElements)}
 
 ### Subsections
+
 #### ${d.subsection1Title || ""}
-${formatBullets(d.subsection1Bullets)}
+${bullets(d.subsection1Bullets)}
 
 #### ${d.subsection2Title || ""}
-${formatBullets(d.subsection2Bullets)}
+${bullets(d.subsection2Bullets)}
 
 ---
 
 # Code
 
 ## Complete Implementation
-![Preview](${d.completePreviewURL || ""})
+
+${
+  d.completePreviewURL
+    ? `![Preview](${d.completePreviewURL})`
+    : ""
+}
 
 \`\`\`html
 ${d.completeCode || ""}
 \`\`\`
 
+---
+
 ## Essential Attributes
-${formatBullets(d.essentialAttributes)}
+${bullets(d.essentialAttributes)}
 
 ## Optional Attributes
-${formatBullets(d.optionalAttributes)}
+${bullets(d.optionalAttributes)}
 
 ## Slots
-${formatBullets(d.slots)}
+${bullets(d.slots)}
 
 ---
 
 # Code Builder
+
 ${d.codeBuilderNotes || ""}
 
 1. ${d.codeBuilderStep1 || ""}
 2. ${d.codeBuilderStep2 || ""}
 3. ${d.codeBuilderStep3 || ""}
 `;
-    }
-
-    function formatBullets(text) {
-      if (!text) return "";
-      return text
-        .split("\n")
-        .filter(line => line.trim() !== "")
-        .map(line => `- ${line}`)
-        .join("\n");
     }
 
     function downloadDoc(data) {

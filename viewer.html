@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>Submissions Viewer</title>
+  <title>Component Documentation Submissions</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -91,94 +91,150 @@
       });
     }
 
-    // Updated Markdown generator for the NEW GC-style schema
-    function generateMarkdown(data) {
+    // NEW GC-STYLE MARKDOWN GENERATOR
+    function generateMarkdown(d) {
       return `
-# ${data.name}
+# ${d.componentName || ""}
 
-## Short Description
-${data.shortDescription || ""}
+Also called: ${d.alsoCalled || ""}
 
-## Status
-${data.status || ""}
+## Definition
+${d.definition || ""}
 
-## Version
-${data.version || ""}
-
-## Tags
-${data.tags || ""}
+![Preview image](${d.previewImageURL || ""})
+*Alt text:* ${d.previewImageAltText || ""}
 
 ---
 
-# Overview
-${data.overview || ""}
+# Use Cases
+${d.useCaseIntro || ""}
 
-# When to Use
-${data.whenToUse || ""}
+- ${d.useCase1 || ""}
+- ${d.useCase2 || ""}
+- ${d.useCase3 || ""}
+- ${d.useCase4 || ""}
 
-# When Not to Use
-${data.whenNotToUse || ""}
+---
 
-# How It Works
-${data.howItWorks || ""}
+# Problems This Component Solves
+${d.problemsIntro || ""}
 
-## States
-${data.states || ""}
+- ${d.problem1 || ""}
+- ${d.problem2 || ""}
+- ${d.problem3 || ""}
+- ${d.problem4 || ""}
 
-## Interactions
-${data.interactions || ""}
-
-# Anatomy
-${data.anatomy || ""}
-
-# Content Guidelines
-${data.contentGuidelines || ""}
-
-# Accessibility
-
-## Keyboard Interaction
-${data.accessibilityKeyboard || ""}
-
-## Screen Reader Notes
-${data.accessibilityScreenReader || ""}
-
-## WCAG Considerations
-${data.accessibilityWCAG || ""}
-
-# Code Examples
-
-## HTML
-\`\`\`html
-${data.htmlExample || ""}
-\`\`\`
-
-## React
-\`\`\`jsx
-${data.reactExample || ""}
-\`\`\`
-
-## Variants
-\`\`\`html
-${data.variantExamples || ""}
-\`\`\`
-
-# Design Tokens
-
-## Color
-${data.tokensColor || ""}
-
-## Spacing
-${data.tokensSpacing || ""}
-
-## Typography
-${data.tokensTypography || ""}
-
-# API / Props
-${data.props || ""}
+---
 
 # Related Components
-${data.relatedComponents || ""}
+- ${d.related1 || ""}
+- ${d.related2 || ""}
+- ${d.related3 || ""}
+
+---
+
+# Component Types & Roles
+
+## ${d.type1Name || ""}
+![Type image](${d.type1ImageURL || ""})
+*Alt text:* ${d.type1ImageAlt || ""}
+
+Use this type to:
+- ${d.type1Use1 || ""}
+- ${d.type1Use2 || ""}
+- ${d.type1Use3 || ""}
+- ${d.type1Use4 || ""}
+
+---
+
+# Anatomy
+
+![Anatomy](${d.anatomyImageURL || ""})
+*Alt text:* ${d.anatomyAltText || ""}
+
+### Elements
+- ${d.anatomyElement1 || ""}
+- ${d.anatomyElement2 || ""}
+- ${d.anatomyElement3 || ""}
+- ${d.anatomyElement4 || ""}
+
+---
+
+# Design & Accessibility
+
+${d.designAccessibilityIntro || ""}
+
+### Requirements
+- ${d.requirement1 || ""}
+- ${d.requirement2 || ""}
+- ${d.requirement3 || ""}
+- ${d.requirement4 || ""}
+
+### Details Sections
+#### ${d.details1Title || ""}
+${formatBullets(d.details1Bullets)}
+
+#### ${d.details2Title || ""}
+${formatBullets(d.details2Bullets)}
+
+#### ${d.details3Title || ""}
+${formatBullets(d.details3Bullets)}
+
+---
+
+# Canada.ca Requirements
+
+### Required Elements
+${formatBullets(d.requiredElements)}
+
+### Optional Elements
+${formatBullets(d.optionalElements)}
+
+### Subsections
+#### ${d.subsection1Title || ""}
+${formatBullets(d.subsection1Bullets)}
+
+#### ${d.subsection2Title || ""}
+${formatBullets(d.subsection2Bullets)}
+
+---
+
+# Code
+
+## Complete Implementation
+![Preview](${d.completePreviewURL || ""})
+
+\`\`\`html
+${d.completeCode || ""}
+\`\`\`
+
+## Essential Attributes
+${formatBullets(d.essentialAttributes)}
+
+## Optional Attributes
+${formatBullets(d.optionalAttributes)}
+
+## Slots
+${formatBullets(d.slots)}
+
+---
+
+# Code Builder
+${d.codeBuilderNotes || ""}
+
+1. ${d.codeBuilderStep1 || ""}
+2. ${d.codeBuilderStep2 || ""}
+3. ${d.codeBuilderStep3 || ""}
 `;
+    }
+
+    function formatBullets(text) {
+      if (!text) return "";
+      return text
+        .split("\n")
+        .filter(line => line.trim() !== "")
+        .map(line => `- ${line}`)
+        .join("\n");
     }
 
     function downloadDoc(data) {
@@ -188,7 +244,7 @@ ${data.relatedComponents || ""}
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${data.name.replace(/\s+/g, "-").toLowerCase()}.md`;
+      a.download = `${data.componentName?.replace(/\s+/g, "-").toLowerCase() || "component"}.md`;
       a.click();
 
       URL.revokeObjectURL(url);

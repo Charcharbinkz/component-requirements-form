@@ -114,8 +114,8 @@
     }
 
     async function loadSubmissions() {
+      const API = "https://component-requirements-form.onrender.com";
       const res = await fetch(`${API}/submissions`);
-      const submissions = await res.json();
 
       const tbody = document.querySelector("#submissions-table tbody");
       tbody.innerHTML = "";

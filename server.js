@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json({ limit: "5mb" }));
 
 const db = new sqlite3.Database("components.db");
 db.run("CREATE TABLE IF NOT EXISTS submissions (id INTEGER PRIMARY KEY, data TEXT)");

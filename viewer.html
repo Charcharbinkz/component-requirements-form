@@ -2,88 +2,85 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>Component Documentation Submissions</title>
+  <title>Viewer</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f7f7f7;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      margin-bottom: 40px;
-    }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ddd;
-      vertical-align: top;
-    }
-    th {
-      background: #eee;
-    }
-    pre {
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      margin: 0;
-    }
-    button {
-      padding: 6px 12px;
-      background: #005ea5;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-right: 6px;
-    }
-    button:hover {
-      background: #003f73;
-    }
-
-    /* Preview panel */
-    #preview-panel {
-      background: white;
-      border: 1px solid #ddd;
-      padding: 20px;
-      border-radius: 6px;
-      max-width: 900px;
-      margin: auto;
-      display: none;
-      white-space: pre-wrap;
-      font-family: monospace;
-    }
-
-    #close-preview {
-      background: #d3080c;
-      margin-bottom: 20px;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f7f7f7; }
+    table { width: 100%; border-collapse: collapse; background: white; }
+    th, td { padding: 10px; border: 1px solid #ddd; vertical-align: top; }
+    th { background: #eee; }
+    pre { white-space: pre-wrap; word-wrap: break-word; }
+    button { padding: 6px 12px; background: #005ea5; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    #preview-panel { background: white; border: 1px solid #ddd; padding: 20px; border-radius: 6px; max-width: 900px; margin: auto; display: none; white-space: pre-wrap; font-family: monospace; }
+    #close-preview { background: #d3080c; margin-bottom: 20px; }
   </style>
 </head>
 <body>
 
-  <h1>Component Documentation Submissions</h1>
+<h1>Submissions</h1>
 
-  <table id="submissions-table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Data</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+<table id="submissions-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Data</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
-  <!-- Live Preview Panel -->
-  <div id="preview-panel">
-    <button id="close-preview">Close Preview</button>
-    <pre id="preview-content"></pre>
-  </div>
+<div id="preview-panel">
+  <button id="close-preview">Close Preview</button>
+  <pre id="preview-content"></pre>
+</div>
 
-  <script>
-    async function loadSubmissions() {
-      const res = await fetch("https://
+<script>
+async function loadSubmissions() {
+  const res = await fetch("https://component-requirements-form.onrender.com/submissions");
+  const submissions = await res.json();
+
+  const tbody = document.querySelector("#submissions-table tbody");
+  tbody.innerHTML = "";
+
+  submissions.forEach(sub => {
+    const row = document.createElement("tr");
+
+    const idCell = document.createElement("td");
+    idCell.textContent = sub.id;
+
+    const dataCell = document.createElement("td");
+    const parsed = JSON.parse(sub.data);
+    dataCell.innerHTML = "<pre>" + JSON.stringify(parsed, null, 2) + "</pre>";
+
+    const actionsCell = document.createElement("td");
+
+    const previewBtn = document.createElement("button");
+    previewBtn.textContent = "Preview";
+    previewBtn.onclick = () => showPreview(parsed);
+
+    actionsCell.appendChild(previewBtn);
+
+    row.appendChild(idCell);
+    row.appendChild(dataCell);
+    row.appendChild(actionsCell);
+    tbody.appendChild(row);
+  });
+}
+
+function showPreview(data) {
+  const panel = document.getElementById("preview-panel");
+  const content = document.getElementById("preview-content");
+
+  content.textContent = JSON.stringify(data, null, 2);
+  panel.style.display = "block";
+}
+
+document.getElementById("close-preview").onclick = () => {
+  document.getElementById("preview-panel").style.display = "none";
+};
+
+loadSubmissions();
+</script>
+
+</body>
+</html>

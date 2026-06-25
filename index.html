@@ -14,10 +14,18 @@
     h1 {
       margin-bottom: 20px;
     }
-    h2 {
-      margin-top: 40px;
-      border-bottom: 2px solid #ccc;
-      padding-bottom: 5px;
+    details {
+      margin-bottom: 25px;
+      background: white;
+      padding: 15px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+    summary {
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 10px;
     }
     label {
       font-weight: bold;
@@ -58,123 +66,66 @@
 </head>
 <body>
 
-  <h1>GC Component Documentation Form</h1>
+<h1>GC Component Documentation Form</h1>
 
-  <form id="component-form">
+<form id="component-form">
 
-    <h2>Metadata</h2>
+  <!-- SECTION 1 — COMPONENT IDENTITY -->
+  <details open>
+    <summary>1. Component Identity</summary>
+
     <label>Component Name</label>
-    <input type="text" name="name" required />
+    <input name="componentName" required />
 
-    <label>Short Description</label>
-    <textarea name="shortDescription" rows="2"></textarea>
+    <label>Also Called (comma-separated synonyms)</label>
+    <input name="alsoCalled" />
 
-    <label>Status (stable, draft, deprecated)</label>
-    <input type="text" name="status" />
+    <label>One-sentence Definition</label>
+    <textarea name="definition" rows="2" placeholder="One sentence describing what the component is"></textarea>
 
-    <label>Version</label>
-    <input type="text" name="version" />
+    <label>Preview Image URL</label>
+    <input name="previewImageURL" />
 
-    <label>Tags (comma-separated)</label>
-    <input type="text" name="tags" />
+    <label>Preview Image Alt Text (required if static image)</label>
+    <textarea name="previewImageAltText" rows="2"></textarea>
+  </details>
 
-    <h2>Overview</h2>
-    <label>Overview</label>
-    <textarea name="overview" rows="3"></textarea>
+  <!-- SECTION 2 — USE CASES -->
+  <details>
+    <summary>2. Use Cases</summary>
 
-    <h2>Usage</h2>
-    <label>When to Use</label>
-    <textarea name="whenToUse" rows="3"></textarea>
+    <label>Intro Text (mandatory components only)</label>
+    <textarea name="useCaseIntro" rows="2"></textarea>
 
-    <label>When Not to Use</label>
-    <textarea name="whenNotToUse" rows="3"></textarea>
+    <label>Use Case 1</label>
+    <textarea name="useCase1" rows="2"></textarea>
 
-    <h2>How It Works</h2>
-    <label>How It Works</label>
-    <textarea name="howItWorks" rows="3"></textarea>
+    <label>Use Case 2</label>
+    <textarea name="useCase2" rows="2"></textarea>
 
-    <label>States</label>
-    <textarea name="states" rows="2"></textarea>
+    <label>Use Case 3</label>
+    <textarea name="useCase3" rows="2"></textarea>
 
-    <label>Interactions</label>
-    <textarea name="interactions" rows="2"></textarea>
+    <label>Use Case 4</label>
+    <textarea name="useCase4" rows="2"></textarea>
+  </details>
 
-    <h2>Anatomy</h2>
-    <label>Anatomy</label>
-    <textarea name="anatomy" rows="3"></textarea>
+  <!-- SECTION 3 — PROBLEMS SOLVED -->
+  <details>
+    <summary>3. Problems the Component Solves</summary>
 
-    <h2>Content Guidelines</h2>
-    <label>Content Guidelines</label>
-    <textarea name="contentGuidelines" rows="3"></textarea>
+    <label>Intro Sentence (optional)</label>
+    <textarea name="problemsIntro" rows="2"></textarea>
 
-    <h2>Accessibility</h2>
-    <label>Keyboard Interaction</label>
-    <textarea name="accessibilityKeyboard" rows="2"></textarea>
+    <label>Problem 1</label>
+    <textarea name="problem1" rows="2"></textarea>
 
-    <label>Screen Reader Notes</label>
-    <textarea name="accessibilityScreenReader" rows="2"></textarea>
+    <label>Problem 2</label>
+    <textarea name="problem2" rows="2"></textarea>
 
-    <label>WCAG Considerations</label>
-    <textarea name="accessibilityWCAG" rows="2"></textarea>
+    <label>Problem 3</label>
+    <textarea name="problem3" rows="2"></textarea>
 
-    <h2>Code Examples</h2>
-    <label>HTML Example</label>
-    <textarea name="htmlExample" rows="3"></textarea>
-
-    <label>React Example</label>
-    <textarea name="reactExample" rows="3"></textarea>
-
-    <label>Variant Examples</label>
-    <textarea name="variantExamples" rows="3"></textarea>
-
-    <h2>Design Tokens</h2>
-    <label>Color Tokens</label>
-    <textarea name="tokensColor" rows="2"></textarea>
-
-    <label>Spacing Tokens</label>
-    <textarea name="tokensSpacing" rows="2"></textarea>
-
-    <label>Typography Tokens</label>
-    <textarea name="tokensTypography" rows="2"></textarea>
-
-    <h2>API / Props</h2>
-    <label>Props (JSON or text)</label>
-    <textarea name="props" rows="3"></textarea>
-
-    <h2>Related Components</h2>
-    <label>Related Components</label>
-    <textarea name="relatedComponents" rows="2"></textarea>
-
-    <button type="submit">Submit</button>
-  </form>
-
-  <div class="success" id="success-message">
-    Submission saved successfully!
-  </div>
-
-  <script>
-    const form = document.getElementById("component-form");
-    const successMessage = document.getElementById("success-message");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-
-      const res = await fetch("https://component-requirements-form.onrender.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-      if (res.ok) {
-        successMessage.style.display = "block";
-        form.reset();
-      } else {
-        alert("Error submitting form.");
-      }
-    });
-  </script>
-</body>
-</html>
+    <label>Problem 4</label>
+    <textarea name="problem4" rows="2"></textarea>
+  </details>

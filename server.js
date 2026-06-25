@@ -52,13 +52,25 @@ app.post("/submit", (req, res) => {
 
 // Route: get all submissions
 app.get("/submissions", (req, res) => {
-  db.all("SELECT * FROM submissions ORDER BY id DESC", [], (err, rows) => {
-    if (err) {
-      console.error("DB read error:", err);
-      return res.status(500).json({ error: "Database error" });
+  db.all(
+    "SELECT id, data, created_at FROM submissions ORDER BY id DESC",
+    [],
+    (err, rows) => {
+      if (err) {
+        console.error("DB read error:", err);
+        return res.status(500).json({ error: "Database error" });
+      }
+
+      // Ensure each row has parsed JSON
+      const formatted = rows.map(row => ({
+        id: row.id,
+        created_at: row.created_at,
+        data: row.data
+      }));
+
+      res.json(formatted);
     }
-    res.json(rows);
-  });
+  );
 });
 
 // Start server

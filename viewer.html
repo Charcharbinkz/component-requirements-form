@@ -114,37 +114,38 @@
     }
 
     async function loadSubmissions() {
-      const API = "https://component-requirements-form.onrender.com";
-      const res = await fetch(`${API}/submissions`);
+  const API = "https://component-requirements-form.onrender.com";
+  const res = await fetch(`${API}/submissions`);
+  const submissions = await res.json();   // ← FIXED
 
-      const tbody = document.querySelector("#submissions-table tbody");
-      tbody.innerHTML = "";
+  const tbody = document.querySelector("#submissions-table tbody");
+  tbody.innerHTML = "";
 
-      submissions.forEach((entry) => {
-        const data = JSON.parse(entry.data);
+  submissions.forEach((entry) => {
+    const data = JSON.parse(entry.data);
 
-        const tr = document.createElement("tr");
+    const tr = document.createElement("tr");
 
-        tr.innerHTML = `
-          <td>${entry.id}</td>
-          <td>${data.componentName || "(no name)"}</td>
-          <td>${entry.created_at || ""}</td>
-          <td><button class="expand-btn" data-id="${entry.id}">Expand</button></td>
-          <td><button class="generate-btn" data-id="${entry.id}">Generate documentation</button></td>
-        `;
+    tr.innerHTML = `
+      <td>${entry.id}</td>
+      <td>${data.componentName || "(no name)"}</td>
+      <td>${entry.created_at || ""}</td>
+      <td><button class="expand-btn" data-id="${entry.id}">Expand</button></td>
+      <td><button class="generate-btn" data-id="${entry.id}">Generate documentation</button></td>
+    `;
 
-        tbody.appendChild(tr);
+    tbody.appendChild(tr);
 
-        const detailsRow = document.createElement("tr");
-        detailsRow.innerHTML = `
-          <td colspan="5">
-            <div class="details" id="details-${entry.id}">
-              <pre>${JSON.stringify(data, null, 2)}</pre>
-            </div>
-          </td>
-        `;
-        tbody.appendChild(detailsRow);
-      });
+    const detailsRow = document.createElement("tr");
+    detailsRow.innerHTML = `
+      <td colspan="5">
+        <div class="details" id="details-${entry.id}">
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(detailsRow);
+  });
 
       // Expand/collapse
       document.querySelectorAll(".expand-btn").forEach((btn) => {

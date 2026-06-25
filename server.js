@@ -17,13 +17,10 @@ const db = new sqlite3.Database("components.db");
 db.run("CREATE TABLE IF NOT EXISTS submissions (id INTEGER PRIMARY KEY, data TEXT)");
 
 app.post("/submit", (req, res) => {
-  const data = JSON.stringify(req.body);
-  db.run("INSERT INTO submissions (data) VALUES (?)", [data], (err) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send("Database error");
-    }
-    res.sendStatus(200);
+  const json = JSON.stringify(req.body);
+  db.run("INSERT INTO submissions (data) VALUES (?)", [json], function (err) {
+    if (err) return res.status(500).send("Database error");
+    res.send("OK");
   });
 });
 

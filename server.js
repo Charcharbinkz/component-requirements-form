@@ -18,7 +18,11 @@ db.run(`
 `);
 
 // Serve index.html and viewer.html
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(__dirname));
+
+app.get("/viewer", (req, res) => {
+  res.sendFile(path.join(__dirname, "viewer.html"));
+});
 
 // Submit route
 app.post("/submit", (req, res) => {

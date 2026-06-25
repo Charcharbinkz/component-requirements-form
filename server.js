@@ -1,46 +1,68 @@
-const express = require("express");
-const cors = require("cors");
-const sqlite3 = require("sqlite3").verbose();
-const path = require("path");
+import express from "express";
+import cors from "cors";
+import sqlite3 from "sqlite3";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 app.use(cors());
-app.use(express.json({ limit: "5mb" }));
+app.use(express.json());
 
-// Database
-const db = new sqlite3.Database("components.db");
+// Resolve __dirname (needed for Render)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+// Absolute path to SQLite DB (fixes Render's two‑DB issue)
+const dbPath = path.join(__dirname, "components.db");
+const db = new sqlite3.Database(dbPath);
+
+// Create table if not exists
 db.run(`
   CREATE TABLE IF NOT EXISTS submissions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    data TEXT
+    data TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   )
 `);
 
-// Serve index.html and viewer.html
+// Serve static files (index.html, viewer.html, etc.)
 app.use(express.static(__dirname));
 
+// Route: serve viewer.html
 app.get("/viewer", (req, res) => {
   res.sendFile(path.join(__dirname, "viewer.html"));
 });
 
-// Submit route
+// Route: submit form data
 app.post("/submit", (req, res) => {
-  const json = JSON.stringify(req.body);
-  db.run("INSERT INTO submissions (data) VALUES (?)", [json], function (err) {
-    if (err) return res.status(500).send("Database error");
-    res.send("OK");
-  });
+  const data = JSON.stringify(req.body);
+
+  db.run(
+    "INSERT INTO submissions (data) VALUES (?)",
+    [data],
+    function (err) {
+      if (err) {
+        console.error("DB insert error:", err);
+        return res.status(500).json({ error: "Database error" });
+      }
+      res.json({ status: "ok", id: this.lastID });
+    }
+  );
 });
 
-// Submissions route
+// Route: get all submissions
 app.get("/submissions", (req, res) => {
   db.all("SELECT * FROM submissions ORDER BY id DESC", [], (err, rows) => {
-    if (err) return res.status(500).send("Database error");
+    if (err) {
+      console.error("DB read error:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
     res.json(rows);
   });
 });
 
 // Start server
-const port = process.env.PORT || 10000;
-app.listen(port, () => console.log("Server running on port " + port));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

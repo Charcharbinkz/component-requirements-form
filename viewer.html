@@ -112,7 +112,7 @@
     }
 
     async function loadSubmissions() {
-      const res = await fetch("/submissions");
+      const res = await fetch("https://component-requirements-form.onrender.com/submissions");
       const submissions = await res.json();
 
       const tbody = document.querySelector("#submissions-table tbody");

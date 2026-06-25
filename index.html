@@ -2,309 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>GC Component Documentation Form</title>
+  <title>Component Requirements Form</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 40px;
-      max-width: 900px;
-      margin: auto;
-      background: #f7f7f7;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    details {
-      margin-bottom: 25px;
-      background: white;
-      padding: 15px;
-      border-radius: 6px;
-      border: 1px solid #ddd;
-    }
-    summary {
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-bottom: 10px;
-    }
-    label {
-      font-weight: bold;
-      margin-top: 20px;
-      display: block;
-    }
-    textarea, input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 15px;
-    }
-    button {
-      margin-top: 30px;
-      padding: 14px 22px;
-      background: #005ea5;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    button:hover {
-      background: #003f73;
-    }
-    .success {
-      margin-top: 20px;
-      padding: 15px;
-      background: #dff0d8;
-      border: 1px solid #b2d8b2;
-      color: #3c763d;
-      border-radius: 4px;
-      display: none;
-    }
+    body { font-family: Arial, sans-serif; padding: 40px; max-width: 900px; margin: auto; }
+    label { font-weight: bold; margin-top: 20px; display: block; }
+    textarea, input { width: 100%; padding: 10px; margin-top: 6px; border: 1px solid #ccc; border-radius: 4px; }
+    button { margin-top: 30px; padding: 14px 22px; background: #005ea5; color: white; border: none; border-radius: 4px; cursor: pointer; }
   </style>
 </head>
 <body>
 
-<h1>GC Component Documentation Form</h1>
+<h1>Component Requirements Form</h1>
 
 <form id="component-form">
 
-  <!-- SECTION 1 — COMPONENT IDENTITY -->
-  <details open>
-    <summary>1. Component Identity</summary>
+  <label>Component Name</label>
+  <input name="componentName" required />
 
-    <label>Component Name</label>
-    <input name="componentName" required />
+  <label>Definition</label>
+  <textarea name="definition"></textarea>
 
-    <label>Also Called (comma-separated synonyms)</label>
-    <input name="alsoCalled" />
+  <label>Use Case 1</label>
+  <textarea name="useCase1"></textarea>
 
-    <label>One-sentence Definition</label>
-    <textarea name="definition" rows="2" placeholder="One sentence describing what the component is"></textarea>
+  <label>Use Case 2</label>
+  <textarea name="useCase2"></textarea>
 
-    <label>Preview Image URL</label>
-    <input name="previewImageURL" />
+  <label>Use Case 3</label>
+  <textarea name="useCase3"></textarea>
 
-    <label>Preview Image Alt Text (required if static image)</label>
-    <textarea name="previewImageAltText" rows="2"></textarea>
-  </details>
-
-  <!-- SECTION 2 — USE CASES -->
-  <details>
-    <summary>2. Use Cases</summary>
-
-    <label>Intro Text (mandatory components only)</label>
-    <textarea name="useCaseIntro" rows="2"></textarea>
-
-    <label>Use Case 1</label>
-    <textarea name="useCase1" rows="2"></textarea>
-
-    <label>Use Case 2</label>
-    <textarea name="useCase2" rows="2"></textarea>
-
-    <label>Use Case 3</label>
-    <textarea name="useCase3" rows="2"></textarea>
-
-    <label>Use Case 4</label>
-    <textarea name="useCase4" rows="2"></textarea>
-  </details>
-
-  <!-- SECTION 3 — PROBLEMS SOLVED -->
-  <details>
-    <summary>3. Problems the Component Solves</summary>
-
-    <label>Intro Sentence (optional)</label>
-    <textarea name="problemsIntro" rows="2"></textarea>
-
-    <label>Problem 1</label>
-    <textarea name="problem1" rows="2"></textarea>
-
-    <label>Problem 2</label>
-    <textarea name="problem2" rows="2"></textarea>
-
-    <label>Problem 3</label>
-    <textarea name="problem3" rows="2"></textarea>
-
-    <label>Problem 4</label>
-    <textarea name="problem4" rows="2"></textarea>
-  </details>
-
-  <!-- SECTION 4 — RELATED COMPONENTS -->
-  <details>
-    <summary>4. Related Components</summary>
-
-    <label>Related Component 1 (name + action)</label>
-    <textarea name="related1" rows="2"></textarea>
-
-    <label>Related Component 2</label>
-    <textarea name="related2" rows="2"></textarea>
-
-    <label>Related Component 3</label>
-    <textarea name="related3" rows="2"></textarea>
-  </details>
-
-  <!-- SECTION 5 — COMPONENT TYPES & ROLES -->
-  <details>
-    <summary>5. Component Types & Roles</summary>
-
-    <label>Type 1 Name</label>
-    <input name="type1Name" />
-
-    <label>Type 1 Image URL</label>
-    <input name="type1ImageURL" />
-
-    <label>Type 1 Image Alt Text</label>
-    <textarea name="type1ImageAlt" rows="2"></textarea>
-
-    <label>Type 1 Use Case 1</label>
-    <textarea name="type1Use1" rows="2"></textarea>
-
-    <label>Type 1 Use Case 2</label>
-    <textarea name="type1Use2" rows="2"></textarea>
-
-    <label>Type 1 Use Case 3</label>
-    <textarea name="type1Use3" rows="2"></textarea>
-
-    <label>Type 1 Use Case 4</label>
-    <textarea name="type1Use4" rows="2"></textarea>
-  </details>
-
-  <!-- SECTION 6 — ANATOMY -->
-  <details>
-    <summary>6. Anatomy</summary>
-
-    <label>Anatomy Image URL</label>
-    <input name="anatomyImageURL" />
-
-    <label>Anatomy Alt Text</label>
-    <textarea name="anatomyAltText" rows="2"></textarea>
-
-    <label>Anatomy Element 1 (name + description)</label>
-    <textarea name="anatomyElement1" rows="2"></textarea>
-
-    <label>Anatomy Element 2</label>
-    <textarea name="anatomyElement2" rows="2"></textarea>
-
-    <label>Anatomy Element 3</label>
-    <textarea name="anatomyElement3" rows="2"></textarea>
-
-    <label>Anatomy Element 4</label>
-    <textarea name="anatomyElement4" rows="2"></textarea>
-  </details>
-
-  <!-- SECTION 7 — DESIGN & ACCESSIBILITY -->
-  <details>
-    <summary>7. Design & Accessibility</summary>
-
-    <label>Intro Text</label>
-    <textarea name="designAccessibilityIntro" rows="2"></textarea>
-
-    <label>Requirement 1</label>
-    <textarea name="requirement1" rows="2"></textarea>
-
-    <label>Requirement 2</label>
-    <textarea name="requirement2" rows="2"></textarea>
-
-    <label>Requirement 3</label>
-    <textarea name="requirement3" rows="2"></textarea>
-
-    <label>Requirement 4</label>
-    <textarea name="requirement4" rows="2"></textarea>
-
-    <h3>Details Sections (up to 3)</h3>
-
-    <label>Details Section 1 Title</label>
-    <input name="details1Title" />
-
-    <label>Details 1 Bullets (2–7)</label>
-    <textarea name="details1Bullets" rows="4"></textarea>
-
-    <label>Details Section 2 Title</label>
-    <input name="details2Title" />
-
-    <label>Details 2 Bullets</label>
-    <textarea name="details2Bullets" rows="4"></textarea>
-
-    <label>Details Section 3 Title</label>
-    <input name="details3Title" />
-
-    <label>Details 3 Bullets</label>
-    <textarea name="details3Bullets" rows="4"></textarea>
-  </details>
-
-  <!-- SECTION 8 — CANADA.CA REQUIREMENTS -->
-  <details>
-    <summary>8. Canada.ca Requirements</summary>
-
-    <h3>Required Elements</h3>
-    <textarea name="requiredElements" rows="4"></textarea>
-
-    <h3>Optional Elements</h3>
-    <textarea name="optionalElements" rows="4"></textarea>
-
-    <h3>Subsections</h3>
-    <label>Subsection 1 Title</label>
-    <input name="subsection1Title" />
-
-    <label>Subsection 1 Bullets</label>
-    <textarea name="subsection1Bullets" rows="4"></textarea>
-
-    <label>Subsection 2 Title</label>
-    <input name="subsection2Title" />
-
-    <label>Subsection 2 Bullets</label>
-    <textarea name="subsection2Bullets" rows="4"></textarea>
-  </details>
-
-  <!-- SECTION 9 — CODE -->
-  <details>
-    <summary>9. Code</summary>
-
-    <h3>Complete Implementation</h3>
-    <label>Preview Image URL</label>
-    <input name="completePreviewURL" />
-
-    <label>Code Snippet</label>
-    <textarea name="completeCode" rows="4"></textarea>
-
-    <h3>Essential Attributes</h3>
-    <textarea name="essentialAttributes" rows="4"></textarea>
-
-    <h3>Optional Attributes</h3>
-    <textarea name="optionalAttributes" rows="4"></textarea>
-
-    <h3>Slots</h3>
-    <textarea name="slots" rows="4"></textarea>
-  </details>
-
-  <!-- SECTION 10 — CODE BUILDER -->
-  <details>
-    <summary>10. Code Builder</summary>
-
-    <label>Notes</label>
-    <textarea name="codeBuilderNotes" rows="3"></textarea>
-
-    <label>Step 1</label>
-    <textarea name="codeBuilderStep1" rows="2"></textarea>
-
-    <label>Step 2</label>
-    <textarea name="codeBuilderStep2" rows="2"></textarea>
-
-    <label>Step 3</label>
-    <textarea name="codeBuilderStep3" rows="2"></textarea>
-  </details>
+  <label>Use Case 4</label>
+  <textarea name="useCase4"></textarea>
 
   <button type="submit">Submit</button>
 </form>
 
-<div class="success" id="success-message">
-  Submission saved successfully!
-</div>
-
 <script>
   const form = document.getElementById("component-form");
-  const successMessage = document.getElementById("success-message");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -319,7 +53,7 @@
     });
 
     if (res.ok) {
-      successMessage.style.display = "block";
+      alert("Submitted!");
       form.reset();
     } else {
       alert("Error submitting form.");

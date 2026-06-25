@@ -1,21 +1,26 @@
-import express from "express";
-import bodyParser from "body-parser";
-import sqlite3 from "sqlite3";
-import cors from "cors";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const express = require("express");
+const cors = require("cors");
+const sqlite3 = require("sqlite3").verbose();
+const path = require("path");
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
 app.use(express.json({ limit: "5mb" }));
 
+// Database
 const db = new sqlite3.Database("components.db");
-db.run("CREATE TABLE IF NOT EXISTS submissions (id INTEGER PRIMARY KEY, data TEXT)");
 
+db.run(`
+  CREATE TABLE IF NOT EXISTS submissions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    data TEXT
+  )
+`);
+
+// Serve index.html and viewer.html
+app.use(express.static(path.join(__dirname)));
+
+// Submit route
 app.post("/submit", (req, res) => {
   const json = JSON.stringify(req.body);
   db.run("INSERT INTO submissions (data) VALUES (?)", [json], function (err) {
@@ -24,17 +29,14 @@ app.post("/submit", (req, res) => {
   });
 });
 
+// Submissions route
 app.get("/submissions", (req, res) => {
-  db.all("SELECT * FROM submissions", (err, rows) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send("Database error");
-    }
+  db.all("SELECT * FROM submissions ORDER BY id DESC", [], (err, rows) => {
+    if (err) return res.status(500).send("Database error");
     res.json(rows);
   });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+// Start server
+const port = process.env.PORT || 10000;
+app.listen(port, () => console.log("Server running on port " + port));

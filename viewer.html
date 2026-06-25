@@ -37,11 +37,26 @@
       padding: 0;
       font: inherit;
     }
+    #generate-all {
+      background: #0078d4;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    #generate-all:hover {
+      background: #005fa3;
+    }
   </style>
 </head>
 <body>
 
   <h1>Component Submissions</h1>
+
+  <!-- NEW BUTTON: Generate full HTML file -->
+  <button id="generate-all">Generate All Documentation (HTML)</button>
 
   <table id="submissions-table">
     <thead>
@@ -57,62 +72,49 @@
   </table>
 
   <script>
-    function buildDocumentationHtml(data) {
+    const API = "https://component-requirements-form.onrender.com";
+
+    function buildSingleDoc(data) {
       const name = data.componentName || "Untitled component";
 
-      const html = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>${name} – Component documentation</title>
-  <style>
-    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 40px; line-height: 1.6; }
-    h1, h2 { margin-top: 1.4em; }
-    code, pre { font-family: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-    pre { background: #f5f5f5; padding: 12px; border-radius: 4px; overflow-x: auto; }
-  </style>
-</head>
-<body>
+      return `
+        <section style="margin-bottom: 60px;">
+          <h1>${name}</h1>
 
-  <h1>${name}</h1>
+          <h2>Overview</h2>
+          <p>${data.summary || ""}</p>
 
-  <h2>Overview</h2>
-  <p>${data.summary || ""}</p>
+          <h2>When to use this component</h2>
+          <p>${data.whenToUse || ""}</p>
 
-  <h2>When to use this component</h2>
-  <p>${data.whenToUse || ""}</p>
+          <h2>When not to use this component</h2>
+          <p>${data.whenNotToUse || ""}</p>
 
-  <h2>When not to use this component</h2>
-  <p>${data.whenNotToUse || ""}</p>
+          <h2>How it works</h2>
+          <p>${data.howItWorks || ""}</p>
 
-  <h2>How it works</h2>
-  <p>${data.howItWorks || ""}</p>
+          <h2>Anatomy</h2>
+          <p>${data.anatomy || ""}</p>
 
-  <h2>Anatomy</h2>
-  <p>${data.anatomy || ""}</p>
+          <h2>Content guidelines</h2>
+          <p>${data.contentGuidelines || ""}</p>
 
-  <h2>Content guidelines</h2>
-  <p>${data.contentGuidelines || ""}</p>
+          <h2>Accessibility considerations</h2>
+          <p>${data.accessibility || ""}</p>
 
-  <h2>Accessibility considerations</h2>
-  <p>${data.accessibility || ""}</p>
+          <h2>Code examples</h2>
+          <pre><code>${data.codeExample || ""}</code></pre>
 
-  <h2>Code examples</h2>
-  <pre><code>${data.codeExample || ""}</code></pre>
+          <h2>Related components</h2>
+          <p>${data.relatedComponents || ""}</p>
 
-  <h2>Related components</h2>
-  <p>${data.relatedComponents || ""}</p>
-
-</body>
-</html>
-      `.trim();
-
-      return html;
+          <hr style="margin-top: 40px;">
+        </section>
+      `;
     }
 
     async function loadSubmissions() {
-      const res = await fetch("https://component-requirements-form.onrender.com/submissions");
+      const res = await fetch(`${API}/submissions`);
       const submissions = await res.json();
 
       const tbody = document.querySelector("#submissions-table tbody");
@@ -144,6 +146,7 @@
         tbody.appendChild(detailsRow);
       });
 
+      // Expand/collapse
       document.querySelectorAll(".expand-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
           const id = btn.dataset.id;
@@ -152,6 +155,7 @@
         });
       });
 
+      // Per-row documentation
       document.querySelectorAll(".generate-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
           const id = btn.dataset.id;
@@ -159,16 +163,60 @@
           if (!entry) return;
 
           const data = JSON.parse(entry.data);
-          const docHtml = buildDocumentationHtml(data);
+          const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>${data.componentName || "Component"} – Documentation</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 40px; line-height: 1.6; }
+    h1, h2 { margin-top: 1.4em; }
+    pre { background: #f5f5f5; padding: 12px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  ${buildSingleDoc(data)}
+</body>
+</html>
+          `.trim();
 
-          const blob = new Blob([docHtml], { type: "text/html" });
+          const blob = new Blob([html], { type: "text/html" });
           const url = URL.createObjectURL(blob);
-
-          const win = window.open(url, "_blank");
-          if (!win) {
-            alert("Popup blocked. Please allow popups for this site to view the generated documentation.");
-          }
+          window.open(url, "_blank");
         });
+      });
+
+      // Generate ALL documentation
+      document.getElementById("generate-all").addEventListener("click", () => {
+        let sections = "";
+        submissions.forEach(entry => {
+          const data = JSON.parse(entry.data);
+          sections += buildSingleDoc(data);
+        });
+
+        const fullHtml = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>All Component Documentation</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 40px; line-height: 1.6; }
+    h1 { margin-top: 40px; }
+    h2 { margin-top: 20px; }
+    pre { background: #f5f5f5; padding: 12px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  ${sections}
+</body>
+</html>
+        `.trim();
+
+        const blob = new Blob([fullHtml], { type: "text/html" });
+        const url = URL.createObjectURL(blob);
+        window.open(url, "_blank");
       });
     }
 

@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Absolute path to SQLite DB (fixes Render's two‑DB issue)
-const dbPath = path.join(__dirname, "components.db");
+const dbPath = path.resolve("/opt/render/project/src/components.db");
 const db = new sqlite3.Database(dbPath);
 
 // Create table if not exists

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,10 +28,14 @@
       margin-top: 10px;
       display: none;
     }
-    .expand-btn {
+    .expand-btn, .generate-btn {
       cursor: pointer;
       color: #0078d4;
       text-decoration: underline;
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
     }
   </style>
 </head>
@@ -47,12 +50,67 @@
         <th>Component Name</th>
         <th>Submitted</th>
         <th>Details</th>
+        <th>Documentation</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
 
   <script>
+    function buildDocumentationHtml(data) {
+      const name = data.componentName || "Untitled component";
+
+      const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>${name} – Component documentation</title>
+  <style>
+    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 40px; line-height: 1.6; }
+    h1, h2 { margin-top: 1.4em; }
+    code, pre { font-family: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    pre { background: #f5f5f5; padding: 12px; border-radius: 4px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+
+  <h1>${name}</h1>
+
+  <h2>Overview</h2>
+  <p>${data.summary || ""}</p>
+
+  <h2>When to use this component</h2>
+  <p>${data.whenToUse || ""}</p>
+
+  <h2>When not to use this component</h2>
+  <p>${data.whenNotToUse || ""}</p>
+
+  <h2>How it works</h2>
+  <p>${data.howItWorks || ""}</p>
+
+  <h2>Anatomy</h2>
+  <p>${data.anatomy || ""}</p>
+
+  <h2>Content guidelines</h2>
+  <p>${data.contentGuidelines || ""}</p>
+
+  <h2>Accessibility considerations</h2>
+  <p>${data.accessibility || ""}</p>
+
+  <h2>Code examples</h2>
+  <pre><code>${data.codeExample || ""}</code></pre>
+
+  <h2>Related components</h2>
+  <p>${data.relatedComponents || ""}</p>
+
+</body>
+</html>
+      `.trim();
+
+      return html;
+    }
+
     async function loadSubmissions() {
       const res = await fetch("/submissions");
       const submissions = await res.json();
@@ -69,15 +127,15 @@
           <td>${entry.id}</td>
           <td>${data.componentName || "(no name)"}</td>
           <td>${entry.created_at || ""}</td>
-          <td><span class="expand-btn" data-id="${entry.id}">Expand</span></td>
+          <td><button class="expand-btn" data-id="${entry.id}">Expand</button></td>
+          <td><button class="generate-btn" data-id="${entry.id}">Generate documentation</button></td>
         `;
 
         tbody.appendChild(tr);
 
-        // Details row
         const detailsRow = document.createElement("tr");
         detailsRow.innerHTML = `
-          <td colspan="4">
+          <td colspan="5">
             <div class="details" id="details-${entry.id}">
               <pre>${JSON.stringify(data, null, 2)}</pre>
             </div>
@@ -86,12 +144,30 @@
         tbody.appendChild(detailsRow);
       });
 
-      // Add expand/collapse behavior
       document.querySelectorAll(".expand-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
           const id = btn.dataset.id;
           const panel = document.getElementById("details-" + id);
           panel.style.display = panel.style.display === "block" ? "none" : "block";
+        });
+      });
+
+      document.querySelectorAll(".generate-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.id;
+          const entry = submissions.find(s => String(s.id) === String(id));
+          if (!entry) return;
+
+          const data = JSON.parse(entry.data);
+          const docHtml = buildDocumentationHtml(data);
+
+          const blob = new Blob([docHtml], { type: "text/html" });
+          const url = URL.createObjectURL(blob);
+
+          const win = window.open(url, "_blank");
+          if (!win) {
+            alert("Popup blocked. Please allow popups for this site to view the generated documentation.");
+          }
         });
       });
     }
